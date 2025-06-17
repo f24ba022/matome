@@ -1,4 +1,4 @@
-  # まとめ
+  # Flutter 全まとめ集1
 
 ## プロジェクトのファイル構成
 
@@ -87,7 +87,7 @@ void main() {
     * 親ウィジェットが再構築され、この`StatelessWidget`に新しいプロパティが渡された時。
     * このウィジェットが依存する上位の`InheritedWidget`が変更された時。
 
-```
+```dart
 class クラス名 extends StatelessWidget {
   
   @override
@@ -114,3 +114,148 @@ StatelessWidgetクラスは、`build`というメソッドが用意されます�
 例えるなら、アプリという「家」を建てる際の、デザインコンセプトや骨組み、そして各部屋への動線を決める「設計図」のようなものです。
 
 ### 1. MaterialAppの基本的な使い方
+
+```dart
+return MaterialApp(
+  title: 'Flutter Demo',
+  home: Text(
+    'Hello, Flutter World!!',
+    style: TextStyle(fontSize:32.0),
+  ),
+);
+```
+これは、よく見るとたった１つの文しか書かれてない、ということがわかるでしょう
+か？ MaterialAppクラスのインスタンスを作成しreturnするもので、以下のような文を
+改行してわかりやすく書いているだけなのです。
+```dart
+return MaterialApp( title: OO, home: OO );
+```
+ここでは、`title`と`home`という２つの名前付き引数が用意されています。`title`は、その
+名のとおり、**アプリケーションのタイトル**を示します。`home`というのが、このアプリケー
+ションに組み込まれる**ウィジェット**を示すものです。ここに設定されたウィジェットが、
+このMaterialAppの表示となります。
+
+### ScaffoldとAppBarのまとめ
+
+Flutterにおいて、`Scaffold`と`AppBar`はマテリアルデザインに準拠したアプリケーションの基本的なレイアウトを構成する上で不可欠なウィジェットです。
+
+#### 1. Scaffoldウィジェット
+
+`Scaffold`は、マテリアルデザインの視覚的なレイアウト構造を実装するための基本的なウィジェットです。アプリケーションの最も上位のウィジェットとして機能し、一般的に以下の要素を配置するコンテナとして使用されます。
+
+* **目的:** アプリケーションの骨格を定義し、一貫したUI要素（ヘッダー、フッター、ドロワーなど）を簡単に配置できるようにします。
+* **主なプロパティ:**
+
+    * `appBar`: アプリケーションの上部に表示されるバー（通常は`AppBar`ウィジェット）。
+    * `body`: `AppBar`の下に表示される主要なコンテンツ領域。画面の中心部分にあたります。
+    * `floatingActionButton`: 画面コンテンツ上にフローティング表示されるアクションボタン（例: 新規作成ボタン）。
+    * `drawer`: 画面の左端からスライドして表示されるサイドメニュー。
+    * `endDrawer`: 画面の右端からスライドして表示されるサイドメニュー。
+    * `bottomNavigationBar`: 画面下部に表示されるナビゲーションバー。
+    * `bottomSheet`: 画面下部からスライドして表示される一時的なシート。
+    * `backgroundColor`: `Scaffold`の背景色。
+    * `resizeToAvoidBottomInset`: キーボードが表示された際に`body`のサイズを調整するかどうか（デフォルトは`true`）。
+
+* **使用例:**
+
+    ```dart
+    import 'package:flutter/material.dart';
+
+    void main() {
+      runApp(MyApp());
+    }
+
+    class MyApp extends StatelessWidget {
+      @override
+      Widget build(BuildContext context) {
+        return MaterialApp(
+          title: 'Flutter Demo',
+          home: Scaffold(
+            appBar: AppBar(
+              title: const Text('Hello, Flutter!'),
+            ),
+            body: Text('Hello, Flutter World!!',
+            style: TextStyle(fontsize:32.0),
+            floatingActionButton: 
+            ),
+          ),
+        );
+      }
+    }  
+    ```
+
+#### 2. AppBarウィジェット
+
+`AppBar`は、`Scaffold`ウィジェットの`appBar`プロパティに設定することで、画面の上部に表示されるマテリアルデザインのバーです。アプリケーションの現在の画面に関する情報やアクションを提供します。
+
+* **目的:** アプリケーションのタイトル表示、ナビゲーション、主要なアクションの提供、ブランドの表示などを行います。
+* **主なプロパティ:**
+
+    * `title`: バーの中央または左に表示されるタイトル（通常は`Text`ウィジェット）。
+    * `leading`: タイトルの前に表示されるウィジェット（例: 戻るボタン、ドロワーアイコン）。通常は`IconButton`や`Icon`。
+        * `Scaffold`に`drawer`が設定されている場合、自動的にドロワーを開くアイコン（ハンバーガーメニュー）が表示されます。
+    * `actions`: タイトルの後に表示される一連のウィジェット（例: 検索アイコン、設定アイコン）。通常は`IconButton`のリスト。
+    * `bottom`: `AppBar`の下部に表示されるウィジェット（例: `TabBar`）。
+    * `backgroundColor`: `AppBar`の背景色。
+    * `elevation`: `AppBar`の下に表示される影の深さ。
+    * `centerTitle`: `title`ウィジェットを中央に配置するかどうか（デフォルトはプラットフォームによって異なる）。
+    * `toolbarHeight`: ツールバーの高さ。
+
+* **使用例:**
+
+    ```dart
+    import 'package:flutter/material.dart';
+
+    class MyAppBarExample extends StatelessWidget {
+      @override
+      Widget build(BuildContext context) {
+        return Scaffold(
+          appBar: AppBar(
+            // タイトル
+            title: const Text('My App Title'),
+            // タイトルの前に表示されるウィジェット
+            leading: IconButton(
+              icon: const Icon(Icons.menu),
+              onPressed: () {
+                // ドロワーを開くなど
+                Scaffold.of(context).openDrawer(); // ScaffoldのDrawerを開く
+              },
+            ),
+            // タイトルの後に表示されるアクションウィジェットのリスト
+            actions: <Widget>[
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  // 検索アクション
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.settings),
+                onPressed: () {
+                  // 設定アクション
+                },
+              ),
+            ],
+            // AppBarの背景色
+            backgroundColor: Colors.teal,
+            // 影の高さ
+            elevation: 8.0,
+            // タイトルを中央に配置
+            centerTitle: true,
+            // AppBarの下にTabBarを配置
+            bottom: const TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.home)),
+                Tab(icon: Icon(Icons.favorite)),
+                Tab(icon: Icon(Icons.person)),
+              ],
+            ),
+          ),
+          body: const Center(
+            child: Text('AppBar Example Content'),
+          ),
+          drawer: const Drawer(), // ドロワーを有効にするため
+        );
+      }
+    }
+    ```
